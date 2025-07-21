@@ -28,6 +28,36 @@ BG_IMAGE_URL = os.environ.get("BG_IMAGE_URL", "")
 # Log background image URL
 app.logger.info(f"Background image URL: {BG_IMAGE_URL}")
 
+# Download background image from S3
+def download_background_image():
+    if not BG_IMAGE_URL or not BG_IMAGE_URL.startswith("s3://"):
+        app.logger.warning("Invalid or missing BG_IMAGE_URL")
+        return
+    
+    try:
+        # Parse S3 URL (s3://bucket-name/key)
+        s3_path = BG_IMAGE_URL[5:]
+        bucket_name, key = s3_path.split("/", 1)
+        
+        # Initialize S3 client
+        s3 = boto3.client('s3')
+        
+        # Download image to static folder
+        static_dir = os.path.join(app.root_path, 'static')
+        os.makedirs(static_dir, exist_ok=True)
+        local_path = os.path.join(static_dir, 'background.jpg')
+        
+        s3.download_file(bucket_name, key, local_path)
+        app.logger.info(f"Successfully downloaded background image to {local_path}")
+        
+    except ClientError as e:
+        app.logger.error(f"S3 download error: {e}")
+    except Exception as e:
+        app.logger.error(f"Error downloading image: {e}")
+
+# Download image on app startup
+download_background_image()
+
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
     host= DBHOST,
