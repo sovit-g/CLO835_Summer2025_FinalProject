@@ -3,9 +3,19 @@ from pymysql import connections
 import os
 import random
 import argparse
+import boto3
+from botocore.exceptions import ClientError
+import logging
+import tempfile
 
 
 app = Flask(__name__)
+
+# Configure logging
+app.logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+app.logger.addHandler(handler)
 
 DBHOST = os.environ.get("DBHOST") or "localhost"
 DBUSER = os.environ.get("DBUSER") or "root"
@@ -13,6 +23,10 @@ DBPWD = os.environ.get("DBPWD") or "passwors"
 DATABASE = os.environ.get("DATABASE") or "employees"
 COLOR_FROM_ENV = os.environ.get('APP_COLOR') or "lime"
 DBPORT = int(os.environ.get("DBPORT"))
+BG_IMAGE_URL = os.environ.get("BG_IMAGE_URL", "")
+
+# Log background image URL
+app.logger.info(f"Background image URL: {BG_IMAGE_URL}")
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
