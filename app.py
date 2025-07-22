@@ -29,7 +29,8 @@ COLOR_FROM_ENV = os.environ.get('APP_COLOR') or "lime"
 DBPORT = int(os.environ.get("DBPORT", 3306))
 STUDENT_NAME = os.environ.get("STUDENT_NAME", "Student")
 
-DBPORT = int(os.environ.get("DBPORT"))
+
+
 
 BG_IMAGE_URL = os.environ.get("BG_IMAGE_URL", "")
 
