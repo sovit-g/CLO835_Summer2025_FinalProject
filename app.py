@@ -8,6 +8,7 @@ from botocore.exceptions import ClientError
 import logging
 import tempfile
 
+
 app = Flask(__name__)
 
 # Configure logging
@@ -16,18 +17,25 @@ handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 app.logger.addHandler(handler)
 
+
 # Get environment variables
+
 DBHOST = os.environ.get("DBHOST") or "localhost"
 DBUSER = os.environ.get("DBUSER") or "root"
 DBPWD = os.environ.get("DBPWD") or "password"
 DATABASE = os.environ.get("DATABASE") or "employees"
 COLOR_FROM_ENV = os.environ.get('APP_COLOR') or "lime"
+
 DBPORT = int(os.environ.get("DBPORT", 3306))
 STUDENT_NAME = os.environ.get("STUDENT_NAME", "Student")
+
+DBPORT = int(os.environ.get("DBPORT"))
+
 BG_IMAGE_URL = os.environ.get("BG_IMAGE_URL", "")
 
 # Log background image URL
 app.logger.info(f"Background image URL: {BG_IMAGE_URL}")
+
 
 # Download background image from S3
 def download_background_image():
@@ -58,6 +66,7 @@ def download_background_image():
 
 # Download image on app startup
 download_background_image()
+
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
