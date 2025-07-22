@@ -19,5 +19,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+
 EXPOSE 81
 CMD ["python3", "app.py"]
+
